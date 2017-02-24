@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>test</title>
+        <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+        <script src="vue.js"></script>
+        <style media="screen">
+            #color-selecter {
+                width: 120px;
+                height: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #color-selecter span{
+                display: block;
+                float: left;
+                width: 20px;
+                height: 20px;
+                margin: 4px;
+                border: 1px solid #aaa;
+            }
+            #color-selecter span:hover{
+                margin: 3px;
+                padding: 1px;
+            }
+            .tab-container {
+                border: 2px solid #ddd;
+                background-color: white;
+                width: 150px;
+                height: auto;
+                padding: 5px;
+            }
+            .tab-bar {
+                margin:0 auto;
+            }
+            .tab-bar .active{
+                border: 2px solid #ddd;
+                border-bottom: 2px solid white;
+                background-color: white;
+            }
+            .tab-bar div{
+                float: left;
+                padding: 0 5px;
+                border: 2px solid white;
+                border-bottom: 0;
+                margin-bottom: -2px;
+                z-index: 1;
+            }
+            #color-rgb{
+
+            }
+            #color-rgb div{
+                margin: 10px 0;
+            }
+            .clear {
+                clear: both;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div class="tab-bar">
+                <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
+                <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
+            </div>
+            <div class="clear">
+
+            </div>
+            <div class="tab-container">
+                <div id="color-selecter" v-if="mode">
+                    <span v-bind:style="{'background-color': color}" v-on:click="getColor" v-for="color in colorList"></span>
+                    <div class="clear"></div>
+                </div>
+                <div v-else id="color-rgb">
+                    <div>
+                        R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
+                        G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
+                        B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                    </div>
+                    <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
+                    v-on:click="getColor">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    red: 0,
+                    green: 0,
+                    blue: 0,
+                    mode: true,
+                    colorNow: "#FFF",
+                    colorList: ['aqua', 'black', 'blue', 'fuchsia', 'gray',
+                    'green', 'lime', 'maroon', 'navy', 'olive', 'orange',
+                    'purple', 'red', 'teal', 'white', 'yellow']
+                },
+                methods: {
+                    getColor: function(event){
+                        this.colorNow = event.target.style['background-color'];
+                        console.log(this.colorNow);
+                    }
+                },
+                computed: {
+                    rgb: function(){
+                        this.colorNow = "rgb("+this.red+","+this.green+","+this.blue+")";
+                        return this.colorNow;
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
