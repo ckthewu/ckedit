@@ -1,0 +1,120 @@
+.editor{
+    outline: -webkit-focus-ring-color auto 5px;
+    outline-color: -webkit-focus-ring-color;
+    outline-style: auto;
+    outline-width: 5px;
+    padding: 1px;
+    height: 298px;
+    width: 798px;
+    overflow-y: auto;
+    overflow-x: visible;
+}
+.tool-bar {
+    border: -webkit-focus-ring-color auto 5px;
+    border-color: -webkit-focus-ring-color;
+    border-style: auto;
+    border-width: 5px;
+    position: relative;;
+    padding: 10px;
+    height: 40px;
+    width: 780px;
+}
+.tool-bar .tool{
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 4px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 10px;
+}
+.tool-box{
+    display: inline-block;
+    position: relative;
+}
+.tool-detail{
+    position: absolute;
+    top:35px;
+    left: 2px;
+    border: 1px solid #ddd;
+}
+.photo-set{
+    width: 300px;
+    overflow: auto;
+    background: white;
+}
+.photo-form img{
+    width: 100%;
+    height: auto;
+}
+.updown-list{
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    list-style-type: none;
+}
+.updown-list li{
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: 2em;
+}
+.updown-list li button{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-style: solid;
+}
+.updown-list li button:hover {
+    border-color: blue;
+}
+.color-selecter {
+    width: 120px;
+    height: auto;
+    margin-left: 10px;
+}
+.color-selecter button{
+    display: block;
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 4px;
+    border: 1px solid #aaa;
+}
+.color-selecter button:hover{
+    margin: 3px 5px 5px 3px;
+}
+.tab-container {
+    border: 2px solid #ddd;
+    background-color: white;
+    width: 150px;
+    height: auto;
+    padding: 5px;
+}
+.tab-bar {
+    margin:0 auto;
+    background: white;
+
+}
+.tab-bar .active{
+    border: 2px solid #ddd;
+    border-bottom: 2px solid white;
+    background-color: white;
+}
+.tab-bar div{
+    display: inline-block;
+    padding: 0 5px;
+    border: 2px solid white;
+    border-bottom: 0;
+    margin-bottom: -2px;
+    z-index: 1;
+}
+.color-rgb div{
+    margin: 10px 0;
+}
+.clear {
+    clear: both;
+}

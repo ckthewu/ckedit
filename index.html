@@ -3,215 +3,128 @@
     <head>
         <meta charset="utf-8">
         <title>ckedit</title>
-        <style media="screen">
-            .editer{
-                outline: -webkit-focus-ring-color auto 5px;
-                outline-color: -webkit-focus-ring-color;
-                outline-style: auto;
-                outline-width: 5px;
-                padding: 1px;
-                height: 298px;
-                width: 798px;
-                overflow-y: auto;
-                overflow-x: visible;
-            }
-            .tool-bar {
-                border: -webkit-focus-ring-color auto 5px;
-                border-color: -webkit-focus-ring-color;
-                border-style: auto;
-                border-width: 5px;
-                position: relative;;
-                padding: 10px;
-                height: 40px;
-                width: 780px;
-            }
-            .tool-bar .tool{
-                display: block;
-                width: 30px;
-                height: 30px;
-                margin: 4px;
-                padding: 4px;
-                border: 1px solid #ddd;
-                background-color: white;
-                font-size: 10px;
-            }
-            #color-selecter {
-                width: 120px;
-                height: auto;
-                margin-left: 10px;
-            }
-            #color-selecter button{
-                display: block;
-                float: left;
-                width: 20px;
-                height: 20px;
-                margin: 4px;
-                border: 1px solid #aaa;
-            }
-            #color-selecter button:hover{
-                margin: 3px 5px 5px 3px;
-            }
-            .tab-container {
-                border: 2px solid #ddd;
-                background-color: white;
-                width: 150px;
-                height: auto;
-                padding: 5px;
-            }
-            .tab-bar {
-                margin:0 auto;
-                background: white;
-
-            }
-            .tab-bar .active{
-                border: 2px solid #ddd;
-                border-bottom: 2px solid white;
-                background-color: white;
-            }
-            .tab-bar div{
-                display: inline-block;
-                padding: 0 5px;
-                border: 2px solid white;
-                border-bottom: 0;
-                margin-bottom: -2px;
-                z-index: 1;
-            }
-            #color-rgb div{
-                margin: 10px 0;
-            }
-            .clear {
-                clear: both;
-            }
-            .tool-box{
-                display: inline-block;
-                position: relative;
-            }
-            .tool-detail{
-                position: absolute;
-                top:35px;
-                left: 2px;
-                border: 1px solid #ddd;
-            }
-            .updown-list{
-                margin: 0;
-                padding: 0;
-                width: 100px;
-                list-style-type: none;
-            }
-            .updown-list li{
-                margin: 0;
-                padding: 0;
-                width: auto;
-                height: 2em;
-            }
-            .updown-list li button{
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                background: white;
-                border-style: solid;
-            }
-            .updown-list li button:hover {
-                border-color: blue;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="ckedit.css"></link>
         <script src="vue.js"></script>
     </head>
     <body>
-        <div class="tool-bar" id="app">
-            <div class="tool-box">
-                <button class="tool" title="修改字体颜色" v-on:click="toggleColor(1)"
-                v-bind:style="{'color':colorNow}">A</button>
-                <div v-if="showC" class="tool-detail">
-                    <div class="tab-bar">
-                        <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
-                        <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="tab-container">
-                        <div id="color-selecter" v-if="mode">
-                            <button v-bind:style="{'background-color': color}" v-on:click="getColor" v-for="color in colorList"> </button>
-                            <div class="clear"></div>
+        <div id="app">
+            <div class="tool-bar">
+                <div class="tool-box">
+                    <button class="tool" title="修改字体颜色" v-on:click="toggleColor(1)"
+                    v-bind:style="{'color':colorNow}">A</button>
+                    <div v-if="showC" class="tool-detail">
+                        <div class="tab-bar">
+                            <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
+                            <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
                         </div>
-                        <div v-else id="color-rgb">
+                        <div class="clear"></div>
+                        <div class="tab-container">
+                            <div class="color-selecter" v-if="mode">
+                                <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 1)" v-for="color in colorList"> </button>
+                                <div class="clear"></div>
+                            </div>
+                            <div v-else class="color-rgb">
+                                <div>
+                                    R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
+                                    G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
+                                    B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                </div>
+                                <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
+                                v-on:click="getColor($event, 1)">
+                                </div>
+                            </div>
                             <div>
-                                R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
-                                G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
-                                B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                <button type="button"   v-on:click="setColor(1)">确定</button>
                             </div>
-                            <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
-                            v-on:click="getColor">
-                            </div>
-                        </div>
-                        <div>
-                            <button type="button"   v-on:click="setColor(1)">确定</button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="修改背景颜色" v-on:click="toggleColor(2)"
-                v-bind:style="{'background-color': colorNow}">A</button>
-                <div v-if="showBGC" class="tool-detail">
-                    <div class="tab-bar">
-                        <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
-                        <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="tab-container">
-                        <div id="color-selecter" v-if="mode">
-                            <button v-bind:style="{'background-color': color}" v-on:click="getColor" v-for="color in colorList"> </button>
-                            <div class="clear"></div>
+                <div class="tool-box">
+                    <button class="tool" title="修改背景颜色" v-on:click="toggleColor(2)"
+                    v-bind:style="{'background-color': bgcolorNow}">A</button>
+                    <div v-if="showBGC" class="tool-detail">
+                        <div class="tab-bar">
+                            <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
+                            <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
                         </div>
-                        <div v-else id="color-rgb">
+                        <div class="clear"></div>
+                        <div class="tab-container">
+                            <div class="color-selecter" v-if="mode">
+                                <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 2)" v-for="color in colorList"> </button>
+                                <div class="clear"></div>
+                            </div>
+                            <div v-else class="color-rgb">
+                                <div>
+                                    R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
+                                    G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
+                                    B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                </div>
+                                <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
+                                v-on:click="getColor($event, 2)">
+                                </div>
+                            </div>
                             <div>
-                                R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
-                                G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
-                                B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                <button type="button"   v-on:click="setColor(2)">确定</button>
                             </div>
-                            <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
-                            v-on:click="getColor">
-                            </div>
-                        </div>
-                        <div>
-                            <button type="button"   v-on:click="setColor(2)">确定</button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="粗体" v-on:click="toggleBold" style="font-weight: bold">B</button>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="斜体" v-on:click="toggleOblique" style="font-style:oblique;">I</button>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="下划线" v-on:click="toggleUdline" style="text-decoration:underline">U</button>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="增加缩进" v-on:click="addIndent">☞</button>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="减少缩进" v-on:click="minusIndent">☜</button>
-            </div>
-            <div class="tool-box">
-                <button class="tool" title="对齐方向" v-on:click="showAlign = !showAlign">☰</button>
-                <div v-if="showAlign" class="tool-detail">
-                    <ul class="updown-list">
-                        <li><button type="button" v-on:click="setAlign('justify')">两端对齐</button></li>
-                        <li><button type="button" v-on:click="setAlign('center')">居中</button></li>
-                        <li><button type="button" v-on:click="setAlign('left')">左对齐</button></li>
-                        <li><button type="button" v-on:click="setAlign('right')">右对齐</button></li>
-                    </ul>
+                <div class="tool-box">
+                    <button class="tool" title="粗体" v-on:click="toggleBold" style="font-weight: bold">B</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="斜体" v-on:click="toggleOblique" style="font-style:oblique;">I</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="下划线" v-on:click="toggleUdline" style="text-decoration:underline">U</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="增加缩进" v-on:click="addIndent">☞</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="减少缩进" v-on:click="minusIndent">☜</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="对齐方向" v-on:click="showAlign = !showAlign">☰</button>
+                    <div v-if="showAlign" class="tool-detail">
+                        <ul class="updown-list">
+                            <li><button type="button" v-on:click="setAlign('justify')">两端对齐</button></li>
+                            <li><button type="button" v-on:click="setAlign('center')">居中</button></li>
+                            <li><button type="button" v-on:click="setAlign('left')">左对齐</button></li>
+                            <li><button type="button" v-on:click="setAlign('right')">右对齐</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="插入列表" v-on:click="toggleList">·-</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="清除格式" v-on:click="clearStyle">C</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="格式刷" v-on:dblclick="cloneStyle" v-on:click="">刷</button>
+                </div>
+                <div class="tool-box">
+                    <button class="tool" title="插入图片" v-on:click="showPhoto = !showPhoto">图</button>
+                    <div v-if="showPhoto" v-if="showPhoto" class="tool-detail">
+                        <div class="photo-set">
+                            <ul>
+                                <li>url:<input type="text" name="" v-model="photoURL"></li>
+                                <li>width:<input type="text" name="" v-model="photoWidth"></li>
+                                <li>height:<input type="text" name="" v-model="photoHeight"></li>
+                            </ul>
+                            <button type="button" name="button" v-on:click="insertPhoto">插入</button>
+                            <img v-bind:style="{'width': photoWidth, 'height': photoHeight}" v-bind:src="photoURL || 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png'">
 
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="editer" class="1" contentEditable="true">
-            <p>shen<span>mgui</span>a</p>
-            <p>zhongjian</p>
-            <p>shen<span>mgui</span>a</p>
+            <div class="editor" id="editor" contentEditable="true" v-on:mouseup="pasteStyle">
+                <p>shen<span>mgui</span>a</p>
+                <p>zhongjian</p>
+                <p>shen<span>mgui</span>a</p>
+            </div>
         </div>
         <script src="ckedit.js"></script>
         <script type="text/javascript">
@@ -225,16 +138,39 @@
                     showC: false,
                     showBGC: false,
                     showAlign: false,
+                    showPhoto: false,
                     nlnow: [],
+                    styleNow: "",
+                    stylePaste: false,
+                    photoURL: "",
+                    photoWidth: "100%",
+                    photoHeight: "auto",
                     colorNow: "red",
+                    bgcolorNow: "red",
                     colorList: ['aqua', 'black', 'blue', 'fuchsia', 'gray',
                     'green', 'lime', 'maroon', 'navy', 'olive', 'orange',
                     'purple', 'red', 'teal', 'white', 'yellow']
                 },
+                mounted: function(){
+                    var editor = document.getElementById("editor");
+                    if(editor.childNodes.length){
+                        setSelection(editor.childNodes[0]);
+                    }
+                    else{
+                        var p = document.createElement("P");
+                        editor.appendChild(p);
+                        setSelection(p);
+                    }
+                },
                 methods: {
-                    getColor: function(event){
-                        this.colorNow = event.target.style['background-color'];
-                        console.log(this.colorNow);
+                    getColor: function(event, mode){
+                        if (mode == 1) {
+                            this.colorNow = event.target.style['background-color'];
+                        }
+                        else if (mode == 2){
+                            this.bgcolorNow = event.target.style['background-color'];
+                        }
+
                     },
                     setColor: function(mode){
                         if (mode == 1){
@@ -245,7 +181,7 @@
                         }
                         else if (mode == 2){
                             for (var i = 0; i < this.nlnow.length; i++){
-                                this.nlnow[i].style["background-color"] = this.colorNow;
+                                this.nlnow[i].style["background-color"] = this.bgcolorNow;
                             }
                             this.showBGC = !this.showBGC;
                         }
@@ -271,6 +207,7 @@
                         }
                         else{
                             for (var i = 0; i < this.nlnow.length; i++){
+
                                 this.nlnow[i].style['font-weight'] = "bold";
                             }
                         }
@@ -299,6 +236,47 @@
                             for (var i = 0; i < this.nlnow.length; i++){
                                 this.nlnow[i].style['text-decoration'] = "underline";
                             }
+                        }
+                    },
+                    toggleList: function(){
+                        this.nlnow = getSelectedPs();
+                        var ul = document.createElement("ul");
+                        this.nlnow[0].parentNode.insertBefore(ul, this.nlnow[0]);
+                        for(var i = 0; i < this.nlnow.length; i++){
+                            if(this.nlnow[i].nodeName == "LI"){
+                                var p = document.createElement("P");
+                                p.innerHTML = this.nlnow[i].innerHTML;
+                                if(this.nlnow[i].parentNode.nextSibling){
+                                    this.nlnow[i].parentNode.parentNode.insertBefore(p, this.nlnow[i].parentNode.nextSibling);
+                                }
+                                else{
+                                    this.nlnow[i].parentNode.parentNode.appendChild(p);
+                                }
+
+                            }
+                            else if (this.nlnow[i].nodeName == "UL") {
+                                var cn = this.nlnow[i].childNodes;
+
+                                for(var j = 0; j < cn.length; j++){
+                                    var p = document.createElement("P");
+                                    p.innerHTML = cn[j].innerHTML;
+                                    this.nlnow[i].parentNode.insertBefore(p, this.nlnow[i]);
+                                }
+                                this.nlnow[i].parentNode.removeChild(this.nlnow[i]);
+                            }
+                            else{
+                                var li = document.createElement('li');
+                                li.innerHTML = this.nlnow[i].innerHTML;
+                                ul.appendChild(li);
+                                this.nlnow[i].parentNode.removeChild(this.nlnow[i]);
+                            }
+
+                        }
+                        if(ul.childNodes.length){
+                            setSelection(ul.childNodes[ul.childNodes.length-1]);
+                        }
+                        else{
+                            setSelection(p);
                         }
                     },
                     addIndent: function(){
@@ -330,6 +308,49 @@
                             this.nlnow[i].style["text-align"] = align;
                         }
                         this.showAlign = false;
+                    },
+                    clearStyle: function(){
+                        this.nlnow = getSelectedElements();
+                        var c = document.createElement("P");
+                        for(var i = 0; i < this.nlnow.length; i++){
+                            this.nlnow[i].style = c.style;
+                        }
+                    },
+                    cloneStyle: function(){
+                        var userSelection = getMySelection();
+                        var range = userSelection.getRangeAt(0);
+                        this.styleNow = range.startContainer.parentNode.style;
+                        this.stylePaste = true;
+
+                    },
+                    pasteStyle: function(){
+                        if(this.stylePaste){
+                            this.nlnow = getSelectedElements();
+                            for(var i = 0; i < this.nlnow.length; i++){
+                                for(var j = 0; j < this.styleNow.length; j++){
+                                    this.nlnow[i].style[this.styleNow[j]] = this.styleNow[this.styleNow[j]];
+                                }
+                            }
+                            this.stylePaste = false;
+                        }
+                    },
+                    insertPhoto: function(){
+                        var userSelection = getMySelection();
+                        if(userSelection.rangeCount){
+                            var range = userSelection.getRangeAt(0);
+                        }
+                        else{
+                            var range = document.createRange();
+                            var editor = document.getElementById('editor')
+                            range.setStart(editor, 0);
+                            range.collapse(true);
+                        }
+
+                        var img = document.createElement("img");
+                        img.src = this.photoURL;
+                        img.style.width = this.photoWidth;
+                        img.style.height = this.photoHeight;
+                        range.insertNode(img);
                     }
                 },
                 computed: {
