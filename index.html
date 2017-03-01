@@ -8,122 +8,128 @@
     </head>
     <body>
         <div id="app">
-            <div class="tool-bar">
-                <div class="tool-box">
-                    <button class="tool" title="修改字体颜色" v-on:click="toggleColor(1)"
-                    v-bind:style="{'color':colorNow}">A</button>
-                    <div v-if="showC" class="tool-detail">
-                        <div class="tab-bar">
-                            <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
-                            <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="tab-container">
-                            <div class="color-selecter" v-if="mode">
-                                <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 1)" v-for="color in colorList"> </button>
-                                <div class="clear"></div>
-                            </div>
-                            <div v-else class="color-rgb">
-                                <div>
-                                    R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
-                                    G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
-                                    B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
-                                </div>
-                                <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
-                                v-on:click="getColor($event, 1)">
-                                </div>
-                            </div>
-                            <div>
-                                <button type="button"   v-on:click="setColor(1)">确定</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="修改背景颜色" v-on:click="toggleColor(2)"
-                    v-bind:style="{'background-color': bgcolorNow}">A</button>
-                    <div v-if="showBGC" class="tool-detail">
-                        <div class="tab-bar">
-                            <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
-                            <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="tab-container">
-                            <div class="color-selecter" v-if="mode">
-                                <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 2)" v-for="color in colorList"> </button>
-                                <div class="clear"></div>
-                            </div>
-                            <div v-else class="color-rgb">
-                                <div>
-                                    R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
-                                    G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
-                                    B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
-                                </div>
-                                <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
-                                v-on:click="getColor($event, 2)">
-                                </div>
-                            </div>
-                            <div>
-                                <button type="button"   v-on:click="setColor(2)">确定</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="粗体" v-on:click="toggleBold" style="font-weight: bold">B</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="斜体" v-on:click="toggleOblique" style="font-style:oblique;">I</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="下划线" v-on:click="toggleUdline" style="text-decoration:underline">U</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="增加缩进" v-on:click="addIndent">☞</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="减少缩进" v-on:click="minusIndent">☜</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="对齐方向" v-on:click="showAlign = !showAlign">☰</button>
-                    <div v-if="showAlign" class="tool-detail">
-                        <ul class="updown-list">
-                            <li><button type="button" v-on:click="setAlign('justify')">两端对齐</button></li>
-                            <li><button type="button" v-on:click="setAlign('center')">居中</button></li>
-                            <li><button type="button" v-on:click="setAlign('left')">左对齐</button></li>
-                            <li><button type="button" v-on:click="setAlign('right')">右对齐</button></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="插入列表" v-on:click="toggleList">·-</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="清除格式" v-on:click="clearStyle">C</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="格式刷" v-on:dblclick="cloneStyle" v-on:click="">刷</button>
-                </div>
-                <div class="tool-box">
-                    <button class="tool" title="插入图片" v-on:click="showPhoto = !showPhoto">图</button>
-                    <div v-if="showPhoto" v-if="showPhoto" class="tool-detail">
-                        <div class="photo-set">
-                            <ul>
-                                <li>url:<input type="text" name="" v-model="photoURL"></li>
-                                <li>width:<input type="text" name="" v-model="photoWidth"></li>
-                                <li>height:<input type="text" name="" v-model="photoHeight"></li>
-                            </ul>
-                            <button type="button" name="button" v-on:click="insertPhoto">插入</button>
-                            <img v-bind:style="{'width': photoWidth, 'height': photoHeight}" v-bind:src="photoURL || 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png'">
 
+            <div class="editor-container">
+                <div class="tool-bar">
+                    <div class="tool-box">
+                        <button class="tool" title="修改字体颜色" v-on:click="toggleColor(1)"
+                        v-bind:style="{'color':colorNow}">A</button>
+                        <div v-if="showC" class="tool-detail">
+                            <div class="tab-bar">
+                                <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
+                                <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="tab-container">
+                                <div class="color-selecter" v-if="mode">
+                                    <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 1)"
+                                    v-for="color in colorList"> </button>
+                                    <div class="clear"></div>
+                                </div>
+                                <div v-else class="color-rgb">
+                                    <div>
+                                        R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
+                                        G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
+                                        B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                    </div>
+                                    <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
+                                    v-on:click="getColor($event, 1)">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button"   v-on:click="setColor(1)">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="修改背景颜色" v-on:click="toggleColor(2)"
+                        v-bind:style="{'background-color': bgcolorNow}">A</button>
+                        <div v-if="showBGC" class="tool-detail">
+                            <div class="tab-bar">
+                                <div v-on:click="mode = !mode" v-bind:class="{ active: mode }">选择颜色</div>
+                                <div v-on:click="mode = !mode" v-bind:class="{ active: !mode }">RGB值</div>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="tab-container">
+                                <div class="color-selecter" v-if="mode">
+                                    <button v-bind:style="{'background-color': color}" v-on:click="getColor($event, 2)" v-for="color in colorList"> </button>
+                                    <div class="clear"></div>
+                                </div>
+                                <div v-else class="color-rgb">
+                                    <div>
+                                        R: <input type="number" max="255" min="0" step="1" v-model="red" style="width: 3em;"><br>
+                                        G: <input type="number" max="255" min="0" step="1" v-model="green" style="width: 3em;"><br>
+                                        B: <input type="number" max="255" min="0" step="1" v-model="blue" style="width: 3em;">
+                                    </div>
+                                    <div v-bind:style="{width: '120px', height: '2em', 'background-color': rgb}"
+                                    v-on:click="getColor($event, 2)">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button"   v-on:click="setColor(2)">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="粗体" v-on:click="toggleBold" style="font-weight: bold">B</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="斜体" v-on:click="toggleOblique" style="font-style:oblique;">I</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="下划线" v-on:click="toggleUdline" style="text-decoration:underline">U</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="增加缩进" v-on:click="addIndent">☞</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="减少缩进" v-on:click="minusIndent">☜</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="对齐方向" v-on:click="showAlign = !showAlign">☰</button>
+                        <div v-if="showAlign" class="tool-detail">
+                            <ul class="updown-list">
+                                <li><button type="button" v-on:click="setAlign('justify')">两端对齐</button></li>
+                                <li><button type="button" v-on:click="setAlign('center')">居中</button></li>
+                                <li><button type="button" v-on:click="setAlign('left')">左对齐</button></li>
+                                <li><button type="button" v-on:click="setAlign('right')">右对齐</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="插入列表" v-on:click="toggleList">·-</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="清除格式" v-on:click="clearStyle">C</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="格式刷" v-on:dblclick="cloneStyle" v-on:click="">刷</button>
+                    </div>
+                    <div class="tool-box">
+                        <button class="tool" title="插入图片" v-on:click="showPhoto = !showPhoto">图</button>
+                        <div v-if="showPhoto" v-if="showPhoto" class="tool-detail">
+                            <div class="photo-set">
+                                <ul>
+                                    <li>url:<input type="text" name="" v-model="photoURL"></li>
+                                    <li>width:<input type="text" name="" v-model="photoWidth"></li>
+                                    <li>height:<input type="text" name="" v-model="photoHeight"></li>
+                                </ul>
+                                <button type="button" name="button" v-on:click="insertPhoto">插入</button>
+                                <img v-bind:style="{'width': photoWidth, 'height': photoHeight}" v-bind:src="photoURL || 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png'">
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="editor" id="editor" contentEditable="true" v-on:mouseup="pasteStyle">
-                <p>shen<span>mgui</span>a</p>
-                <p>zhongjian</p>
-                <p>shen<span>mgui</span>a</p>
+                <div class="leftbar"></div>
+                <div class="editor" id="editor" contentEditable="true" v-on:mouseup="pasteStyle">
+                    <p>shen<span>mgui</span>a</p>
+                    <p>zhongjian</p>
+                    <p>shen<span>mgui</span>a</p>
+                </div>
+                <div class="rightbar"></div>
             </div>
         </div>
         <script src="ckedit.js"></script>
@@ -185,7 +191,6 @@
                             }
                             this.showBGC = !this.showBGC;
                         }
-
                     },
                     toggleColor: function(mode){
                         if(mode == 1){
@@ -311,7 +316,7 @@
                     },
                     clearStyle: function(){
                         this.nlnow = getSelectedElements();
-                        var c = document.createElement("P");
+                        var c = document.createElement("div");
                         for(var i = 0; i < this.nlnow.length; i++){
                             this.nlnow[i].style = c.style;
                         }

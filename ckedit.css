@@ -1,23 +1,56 @@
-.editor{
-    outline: -webkit-focus-ring-color auto 5px;
-    outline-color: -webkit-focus-ring-color;
-    outline-style: auto;
-    outline-width: 5px;
-    padding: 1px;
-    height: 298px;
-    width: 798px;
-    overflow-y: auto;
-    overflow-x: visible;
+#app{
+    width: 90%;
+    margin: 0 5%;
+}
+.editor, .editor:hover{
+    outline-width: 0;
+    background: white;
+    width: 70%;
+    height: 450px;
+    display: inline-block;
+    left: 10%;
+    padding: 25px 5%;
+    overflow: auto;
+    font-size: 16px;
+}
+::-webkit-scrollbar {
+	width: 15px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: rgb(224, 234, 250);
+}
+.editor-container{
+    position: relative;
+    width: 100%;
+    margin: 0;
+    height: auto;
+    border: 1px solid #ddd;
+    font-size:0;
+}
+.editor-container .leftbar, .editor-container .rightbar{
+    display: inline-block;
+    width: 10%;
+    height: 500px;
+    background: #eee;
+}
+.editor-container .leftbar{
+    box-shadow: -3px 0px 3px #ddd inset;
+}
+.editor-container .rightbar{
+    box-shadow: 3px 0px 3px #ddd inset;
+}
+.editor-container::after{
+    content: "";
+    display: block;
+    clear: both;
 }
 .tool-bar {
-    border: -webkit-focus-ring-color auto 5px;
-    border-color: -webkit-focus-ring-color;
-    border-style: auto;
-    border-width: 5px;
+    border-bottom: 1px solid #ddd;
     position: relative;;
-    padding: 10px;
+    padding: 10px 0;
     height: 40px;
-    width: 780px;
+    width: 100%;
+    font-size: 16px;
 }
 .tool-bar .tool{
     display: block;
@@ -32,6 +65,7 @@
 .tool-box{
     display: inline-block;
     position: relative;
+    margin-left: 10px;
 }
 .tool-detail{
     position: absolute;
@@ -97,7 +131,6 @@
 .tab-bar {
     margin:0 auto;
     background: white;
-
 }
 .tab-bar .active{
     border: 2px solid #ddd;
@@ -110,7 +143,6 @@
     border: 2px solid white;
     border-bottom: 0;
     margin-bottom: -2px;
-    z-index: 1;
 }
 .color-rgb div{
     margin: 10px 0;
