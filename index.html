@@ -8,7 +8,6 @@
     </head>
     <body>
         <div id="app">
-
             <div class="editor-container">
                 <div class="tool-bar">
                     <div class="tool-box">
@@ -125,9 +124,7 @@
                 </div>
                 <div class="leftbar"></div>
                 <div class="editor" id="editor" contentEditable="true" v-on:mouseup="pasteStyle">
-                    <p>shen<span>mgui</span>a</p>
-                    <p>zhongjian</p>
-                    <p>shen<span>mgui</span>a</p>
+
                 </div>
                 <div class="rightbar"></div>
             </div>
@@ -153,6 +150,10 @@
                     photoHeight: "auto",
                     colorNow: "red",
                     bgcolorNow: "red",
+                    STDStyle:{'color': '#000', 'background-color': '#FFF',
+                        'font-weight': 'normal', 'font-style': 'normal',
+                        'text-decoration': 'none', "text-indent": '0',
+                        "text-align": 'left'},
                     colorList: ['aqua', 'black', 'blue', 'fuchsia', 'gray',
                     'green', 'lime', 'maroon', 'navy', 'olive', 'orange',
                     'purple', 'red', 'teal', 'white', 'yellow']
@@ -165,6 +166,7 @@
                     else{
                         var p = document.createElement("P");
                         editor.appendChild(p);
+                        p.innerText = "";
                         setSelection(p);
                     }
                 },
@@ -316,21 +318,20 @@
                     },
                     clearStyle: function(){
                         this.nlnow = getSelectedElements();
-                        var c = document.createElement("div");
                         for(var i = 0; i < this.nlnow.length; i++){
-                            this.nlnow[i].style = c.style;
+                            this.nlnow[i].style = this.STDStyle;
                         }
                     },
                     cloneStyle: function(){
                         var userSelection = getMySelection();
                         var range = userSelection.getRangeAt(0);
-                        this.styleNow = range.startContainer.parentNode.style;
+                        this.styleNow = range.commonAncestorContainer.style;
                         this.stylePaste = true;
-
                     },
                     pasteStyle: function(){
                         if(this.stylePaste){
                             this.nlnow = getSelectedElements();
+                            this.nlnow.concat(getSelectedPs());
                             for(var i = 0; i < this.nlnow.length; i++){
                                 for(var j = 0; j < this.styleNow.length; j++){
                                     this.nlnow[i].style[this.styleNow[j]] = this.styleNow[this.styleNow[j]];
@@ -350,7 +351,6 @@
                             range.setStart(editor, 0);
                             range.collapse(true);
                         }
-
                         var img = document.createElement("img");
                         img.src = this.photoURL;
                         img.style.width = this.photoWidth;
